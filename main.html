@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>d3 Updating Bar Chart With Dropdown</title>
+        <!-- Compiled and minified CSS -->
+           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+       <!-- Compiled and minified JavaScript -->
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.js"></script>
+        <style>
+   /*     body {
+            font: 10px sans-serif;
+        }
+        select {
+            display: block;
+        }
+        .bar {
+            fill: purple;
+            opacity: 0.8;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }*/
+        </style>
+    </head>
+    <body>
+        <div id='vis-container' style="text-align: center;">
+            <h2 style="text-align: center">Region Book</h2>
+            <p>By David Gong and Vivekanand Rajasekar</p>
+            <div class="input-field col s12" style="padding-left: 25em; padding-right: 25em">
+                <select id="regionSelect">
+                  <option value="" disabled selected>Choose U.S. region
+                  <option value="New England">New England</option>
+                  <option value="Great Lakes">Great Lakes</option>
+                  <option value="Southeast">Southeast</option>
+                  <option value="Mid-Atlantic">Mid-Atlantic</option>
+                  <option value="Far West">Far West</option>
+                  <option value="Great Plains">Great Plains</option>
+                  <option value="Southwest">Southwest</option>
+                  <option value="Rocky Mountains">Rocky Mountains</option>
+                </select>
+                <label style="padding-left: 25em; padding-right: 25em">United States Regions</label>
+              </div>
+            <p id="comparisonResult"></p>
+            <svg width="760" height="600" style="border: 1px solid black">
+                    <text transform="translate(300,80)">SAT Scores by Region</text>
+
+                    <text transform="translate(50, 340) rotate(270)">SAT Scores (USD)</text>
+                    <text transform="translate(350,570)">Region</text>
+            </svg>
+        </div>
+
+   <!--      <svg id="sat_region_chart"></svg> -->
+
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                var elems = document.querySelectorAll('select');
+                var instances = M.FormSelect.init(elems, {});
+              });
+        </script>
+        <script type="text/javascript">
+            
+        </script>
+        <script type="text/javascript">
+            $("#regionSelect").on('change', function() {
+                var selectedRegion = $(this).children("option:selected").val();
+                console.log(selectedRegion)
+
+                // d3 code here
+                var fileName = "colleges.csv"
+                d3.csv(fileName, function(error, data) {
+                    if (error) throw error;
+
+                    // calculate the averages for the region
+                    var counter = 0
+                    var total = 0
+                    var regionTotal = 0
+                    var regionCounter = 0
+                    data.forEach(function (d) {
+                        if (d["SAT Average"] > 0) {
+                            if (d["Region"] == selectedRegion) {
+                                regionTotal += parseInt(d["SAT Average"])
+                                regionCounter++
+                            }
+                            total += parseInt(d["SAT Average"])
+                            counter++
+                        }    
+                    });
+                    var regionAverage = regionTotal / regionCounter
+                    var nationalAverage = total / counter
+                    var comparisonResult = ((regionAverage - nationalAverage) / nationalAverage) * 100
+                    console.log(comparisonResult)
+
+                    var result = document.getElementById("comparisonResult")
+                    var poorerOrBetter = comparisonResult >= 0 ? "better" : "worse"
+                    var color = "green"
+                    if (poorerOrBetter == "worse") {
+                        color = "red"
+                    }
+                    result.innerHTML = "The " + selectedRegion + " region does <span style='color:'" + color + ">" + comparisonResult.toFixed(2) + "%</span> " + poorerOrBetter + " than the national average."
+
+                    // After displaying results, we now reflect the changes onto the bar graph
+                    var svg = d3.select("")
+                        .attr()
+
+                });
+
+
+            });
+        </script>
+    </body>
+</html>

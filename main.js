@@ -63,10 +63,11 @@ d3.json("topo.json", function (error, us) {
         return color(d.properties.pop);
       })
       .on("mouseover", function (d) {
+
         div.transition()
           .duration(200)
           .style("opacity", .9);
-        div.text(d.properties.regionName)
+        div.text(d.properties.pop)
           .style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY - 28) + "px");
       })
@@ -75,7 +76,8 @@ d3.json("topo.json", function (error, us) {
         div.transition()
           .duration(500)
           .style("opacity", 0);
-      });
+      })
+      
 
 
     svg.append("path")
@@ -131,7 +133,7 @@ d3.json("topo.json", function (error, us) {
 
     //Define x-axis
     xAxis = d3.axisBottom(colorScale)
-    .tickFormat(function(d){ console.log(d/100000) 
+    .tickFormat(function(d){
       return d/100000})
 
     //Set up X axis
@@ -141,7 +143,27 @@ d3.json("topo.json", function (error, us) {
       .call(xAxis);
 
 
+     ///////////////////////////////////////////////////////////////////////////
+    ////////////////////////// Labels /////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
+
+      var labels = svg.append("g").attr("class", "label-group");
+      labels.selectAll(".label")
+        .data(features)
+        .enter()
+        .append("text")
+        .attr("class", "label")
+        .attr("x", function(d) {
+          return path.centroid(d)[0];
+        })
+        .attr("y", function(d) {
+          return path.centroid(d)[1];
+        })
+        .text(function(d) {
+          return d.properties.regionName;
+        });
+
+            ///////////////////////////////////////////////////////////////////////////
 
 
   })

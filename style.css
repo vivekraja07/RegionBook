@@ -2,8 +2,6 @@
     fill: #9b111e; 
     cursor: pointer;
   }
-
-
   
 .region-borders {
   fill: none;
@@ -26,6 +24,15 @@ div.tooltip {
    border-radius: 8px;           
    pointer-events: none;         
  }
+
+ .label {
+  z-index: 10;
+  pointer-events: none;
+  text-anchor: middle;
+  font-size: 1rem;
+  text-shadow: 0 0 3px #fff;
+  fill: rgb(70, 70, 70);
+}
 
 
 

@@ -1,10 +1,5 @@
-var color = d3.scaleLinear()
-  // .domain([310575, 1893765]) 
-  .domain([200000, 1900000])
-  .range(["white", "#8B008B"])
-
-
-
+var formatComma = d3.format(',')
+var formatDecimal = d3.format(".1f")
 
 d3.json("topo.json", function (error, us) {
   if (error) throw error;
@@ -14,6 +9,7 @@ d3.json("topo.json", function (error, us) {
 
   var features = topojson.feature(us, us.objects.regions).features
 
+
   // console.log(features)
 
   d3.csv("colleges.csv", function (csv) {
@@ -22,8 +18,16 @@ d3.json("topo.json", function (error, us) {
       .key(function (d) { return d.Region; })
       .rollup(function (v) { return d3.sum(v, function (d) { return d['Undergrad Population']; }); })
       .entries(csv);
+    
+    var popObject = d3.nest()
+      .key(function (d) { return d.Region; })
+      .rollup(function (v) { return d3.sum(v, function (d) { return d['Undergrad Population']; }); })
+      .object(csv);
 
-    // console.log(populationByRegion)
+
+    var total = d3.nest()
+      .rollup(function (v) { return d3.sum(v, function (d) { return d['Undergrad Population']; }); })
+      .entries(csv);
 
     for (region in populationByRegion) {
       val = populationByRegion[region]
@@ -52,6 +56,11 @@ d3.json("topo.json", function (error, us) {
     ////////////////////////// Draw the Map ////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
 
+    var color = d3.scaleLinear()
+  // .domain([310575, 1893765]) 
+  .domain([200000, 1900000])
+  .range(["white", "#8B008B"])
+
 
     svg.append("g")
       .attr("class", "regions")
@@ -67,7 +76,7 @@ d3.json("topo.json", function (error, us) {
         div.transition()
           .duration(200)
           .style("opacity", .9);
-        div.text(d.properties.pop)
+        div.text(formatComma(d.properties.pop))
           .style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY - 28) + "px");
       })
@@ -163,8 +172,38 @@ d3.json("topo.json", function (error, us) {
           return d.properties.regionName;
         });
 
-            ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    ////////////////////////// Select Logic ////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    d3.select('#regionSelect')
+      .on('change',onchange)
+    
+     ///////////////////////////////////////////////////////////////////////////
+    ////////////////////////// Explanation Logic ////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
 
+      function onchange() {
+        selectValue = d3.select('select').property('value')
+        sentence = selectValue + ' has a total undergraduate population of ' + formatComma(popObject[selectValue]) + '. '
+        sentence += 'My favorite country, The United States of America, has a total population of ' + formatComma(total) + '. '
+        sentence += 'Math tells us that ' + selectValue + ' makes up ' + formatDecimal(popObject[selectValue]/total*100) + '% of \'Merica\'s undergrad population'
+        d3.select('#explanation1')
+          .text(sentence)
+          // console.log(total)
+          // .text(selectValue)
+
+      };
+
+      function doCalcs(selectVal) {
+            
+
+      }
+
+      onchange()
+
+    // console.log(regionSelect)
+    // var selectedRegion = regionSelect.options[regionSelect.selectedIndex].value
+    // console.log(selectedRegion)
 
   })
 

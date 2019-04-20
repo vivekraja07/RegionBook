@@ -1,13 +1,43 @@
 .regions :hover {
-    fill: red;
+    fill: #9b111e; 
+    cursor: pointer;
   }
+
+
   
-  .region-borders {
-    fill: none;
-    stroke: #fff;
-    stroke-width: 0.5px;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-    pointer-events: none;
-  }
+.region-borders {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+div.tooltip {   
+  position: absolute;           
+   text-align: center;           
+   width: 60px;                  
+   height: 28px;                 
+   padding: 2px;             
+   font: 12px sans-serif;        
+   background: white;   
+   border: 0px;      
+   border-radius: 8px;           
+   pointer-events: none;         
+ }
+
+
+ #legend {
+  padding: 1.5em 0 0 1.5em;
+}
+
+li.key {
+  border-top-width: 15px;
+  border-top-style: solid;
+  font-size: .75em;
+  width: 10%;
+  padding-left: 0;
+  padding-right: 0;
+}
   

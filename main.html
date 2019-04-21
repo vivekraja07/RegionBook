@@ -5,35 +5,25 @@
         <title>d3 Updating Bar Chart With Dropdown</title>
         <!-- Compiled and minified CSS -->
            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+           <link rel="stylesheet" href="style.css">
        <!-- Compiled and minified JavaScript -->
        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.js"></script>
         <style>
-   /*     body {
-            font: 10px sans-serif;
+        body {
+            padding: 20px;
         }
-        select {
-            display: block;
-        }
-        .bar {
-            fill: purple;
-            opacity: 0.8;
-        }
-
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
-        }*/
         </style>
     </head>
     <body>
         <div id='vis-container' style="text-align: center;">
             <h2 style="text-align: center">Region Book</h2>
             <p>By David Gong and Vivekanand Rajasekar</p>
-            <div class="input-field col s12" style="padding-left: 25em; padding-right: 25em">
+            <br>
+            <p>To get started, select a region from the United States to view results.</p>
+            <div class="input-field col s12" style="padding-left: 25em; padding-right: 25em;">
                 <select id="regionSelect">
                   <option value="" disabled selected>Choose U.S. region
                   <option value="New England">New England</option>
@@ -48,13 +38,52 @@
                 <label style="padding-left: 25em; padding-right: 25em">United States Regions</label>
               </div>
             <p id="comparisonResult"></p>
-            <svg width="760" height="600" style="border: 1px solid black">
-                    <text transform="translate(300,80)">SAT Scores by Region</text>
-
-                    <text transform="translate(50, 340) rotate(270)">SAT Scores (USD)</text>
-                    <text transform="translate(350,570)">Region</text>
-            </svg>
+          
         </div>
+
+        <div id="smallSelect" class="input-field col s12" style="position: fixed; bottom: 0; right: 0">
+                <select id="smallregionSelect">
+                  <option value="" disabled selected>Choose U.S. region
+                  <option value="New England">New England</option>
+                  <option value="Great Lakes">Great Lakes</option>
+                  <option value="Southeast">Southeast</option>
+                  <option value="Mid-Atlantic">Mid-Atlantic</option>
+                  <option value="Far West">Far West</option>
+                  <option value="Great Plains">Great Plains</option>
+                  <option value="Southwest">Southwest</option>
+                  <option value="Rocky Mountains">Rocky Mountains</option>
+                </select>
+   
+              </div>
+
+            <div id="wrapper">
+            <div id="viz1">       
+              <div id="chart1" style="text-align: center;">
+                <svg id="mapSVG" width="960" height="600"></svg>
+                <span>
+                  <p id="explanation1"></p>
+                </span>
+              </div>
+            </div>
+            </div>
+
+          <svg id="svg1" width="1500" height="600" style="border: 1px solid black; margin-left: 15em; margin-right: 25em">
+                    <text transform="translate(300,80)">SAT Scores by Region</text>
+                    <text transform="translate(1075,80)">Average Family Income by Region</text>
+                    <text transform="translate(15, 340) rotate(270)">SAT Scores (Mean)</text>
+                    <text transform="translate(750, 340) rotate(270)">Average Family Income</text>
+                    <text transform="translate(350,570)">Region</text>
+                    <text transform="translate(1150,570)">Region</text>
+            </svg>
+
+          <div id="my_dataviz" style="text-align: center;"></div>
+
+        <span style="text-align:center; padding-top: 1em;">
+            <h6 id="statisticsHeader"><u>Statistics will load once a region has been selected.</u></h6>
+        </span>
+
+
+
 
    <!--      <svg id="sat_region_chart"></svg> -->
 
@@ -67,52 +96,12 @@
         <script type="text/javascript">
             
         </script>
-        <script type="text/javascript">
-            $("#regionSelect").on('change', function() {
-                var selectedRegion = $(this).children("option:selected").val();
-                console.log(selectedRegion)
+        <script type="text/javascript" src="main.js"></script>   
+        <script src="https://d3js.org/topojson.v2.min.js"></script>
+        <script src="dropdown_statistics.js" type="text/javascript"></script>
+        <script src="region_vs_national_mean_Scores.js" type="text/javascript"></script>
+     <!--    <script src="pieChart.js" type="text/javascript"></script> -->
+        
 
-                // d3 code here
-                var fileName = "colleges.csv"
-                d3.csv(fileName, function(error, data) {
-                    if (error) throw error;
-
-                    // calculate the averages for the region
-                    var counter = 0
-                    var total = 0
-                    var regionTotal = 0
-                    var regionCounter = 0
-                    data.forEach(function (d) {
-                        if (d["SAT Average"] > 0) {
-                            if (d["Region"] == selectedRegion) {
-                                regionTotal += parseInt(d["SAT Average"])
-                                regionCounter++
-                            }
-                            total += parseInt(d["SAT Average"])
-                            counter++
-                        }    
-                    });
-                    var regionAverage = regionTotal / regionCounter
-                    var nationalAverage = total / counter
-                    var comparisonResult = ((regionAverage - nationalAverage) / nationalAverage) * 100
-                    console.log(comparisonResult)
-
-                    var result = document.getElementById("comparisonResult")
-                    var poorerOrBetter = comparisonResult >= 0 ? "better" : "worse"
-                    var color = "green"
-                    if (poorerOrBetter == "worse") {
-                        color = "red"
-                    }
-                    result.innerHTML = "The " + selectedRegion + " region does <span style='color:'" + color + ">" + comparisonResult.toFixed(2) + "%</span> " + poorerOrBetter + " than the national average."
-
-                    // After displaying results, we now reflect the changes onto the bar graph
-                    var svg = d3.select("")
-                        .attr()
-
-                });
-
-
-            });
-        </script>
     </body>
 </html>

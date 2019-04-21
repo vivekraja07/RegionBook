@@ -3,14 +3,16 @@
     <head>
         <meta charset="utf-8">
         <title>d3 Updating Bar Chart With Dropdown</title>
-        <!-- Compiled and minified CSS -->
-           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
            <link rel="stylesheet" href="style.css">
+           <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  
        <!-- Compiled and minified JavaScript -->
        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
         <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.js"></script>
+
         <style>
         body {
             padding: 20px;
@@ -20,10 +22,11 @@
     <body>
         <div id='vis-container' style="text-align: center;">
             <h2 style="text-align: center">Region Book</h2>
-            <p>By David Gong and Vivekanand Rajasekar</p>
-            <br>
-            <p>To get started, select a region from the United States to view results.</p>
-            <div class="input-field col s12" style="padding-left: 25em; padding-right: 25em;">
+            <h6>By David Gong and Vivekanand Rajasekar</h6>
+            <p>A visualization blend of race, average SAT scores, and family income for prospective college statistics. To get started, start by clicking a region or selecting a region from the top right hand corner.</p>
+        </div>
+
+        <div id="smallSelect" class="input-field col-sm-2" style="position: fixed; top: 0; right: 0; margin-right: 3em">
                 <select id="regionSelect">
                   <option value="" disabled selected>Choose U.S. region
                   <option value="New England">New England</option>
@@ -35,24 +38,8 @@
                   <option value="Southwest">Southwest</option>
                   <option value="Rocky Mountains">Rocky Mountains</option>
                 </select>
-                <label style="padding-left: 25em; padding-right: 25em">United States Regions</label>
-              </div>
-            <p id="comparisonResult"></p>
-          
-        </div>
 
-        <div id="smallSelect" class="input-field col s12" style="position: fixed; bottom: 0; right: 0">
-                <select id="smallregionSelect">
-                  <option value="" disabled selected>Choose U.S. region
-                  <option value="New England">New England</option>
-                  <option value="Great Lakes">Great Lakes</option>
-                  <option value="Southeast">Southeast</option>
-                  <option value="Mid-Atlantic">Mid-Atlantic</option>
-                  <option value="Far West">Far West</option>
-                  <option value="Great Plains">Great Plains</option>
-                  <option value="Southwest">Southwest</option>
-                  <option value="Rocky Mountains">Rocky Mountains</option>
-                </select>
+                <p id="comparisonResult"></p>
    
               </div>
 
@@ -60,21 +47,23 @@
             <div id="viz1">       
               <div id="chart1" style="text-align: center;">
                 <svg id="mapSVG" width="960" height="600"></svg>
-                <span>
+                <span style="margin: 10px">
                   <p id="explanation1"></p>
                 </span>
               </div>
             </div>
             </div>
 
-          <svg id="svg1" width="1500" height="600" style="border: 1px solid black; margin-left: 15em; margin-right: 25em">
+          <div style="text-align: center">
+          <svg class="" id="svg1" width="1400" height="500" style="text-align: center">
                     <text transform="translate(300,80)">SAT Scores by Region</text>
-                    <text transform="translate(1075,80)">Average Family Income by Region</text>
+                    <text transform="translate(978,80)">Average Family Income by Region</text>
                     <text transform="translate(15, 340) rotate(270)">SAT Scores (Mean)</text>
-                    <text transform="translate(750, 340) rotate(270)">Average Family Income</text>
+                    <text transform="translate(700, 340) rotate(270)">Average Family Income</text>
                     <text transform="translate(350,570)">Region</text>
                     <text transform="translate(1150,570)">Region</text>
             </svg>
+          </div>
 
           <div id="my_dataviz" style="text-align: center;"></div>
 
@@ -87,12 +76,7 @@
 
    <!--      <svg id="sat_region_chart"></svg> -->
 
-        <script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', function() {
-                var elems = document.querySelectorAll('select');
-                var instances = M.FormSelect.init(elems, {});
-              });
-        </script>
+
         <script type="text/javascript">
             
         </script>

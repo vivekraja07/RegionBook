@@ -466,8 +466,8 @@ d3.json("topo.json", function (error, us) {
 
 
         // set the dimensions and margins of the graph
-        var width = 450
-            height = 450
+        var width = 600
+            height = 600
             margin = 40
 
         // The radius of the pieplot is half the width or half the height (smallest one). I substract a bit of margin.
